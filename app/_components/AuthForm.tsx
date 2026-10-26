@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useState, type FormEvent } from "react";
 import { APP_NAME } from "@/lib/brand";
 
@@ -126,7 +125,6 @@ export default function AuthForm({ mode }: Props) {
 }
 
 function AuthCard({ mode }: Props) {
-  const router = useRouter();
   const isRegister = mode === "register";
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -152,8 +150,8 @@ function AuthCard({ mode }: Props) {
         return;
       }
 
-      router.replace("/");
-      router.refresh();
+      // 整頁重新載入，避免路由快取留著登出前「/ 導回 /login」的結果而卡住
+      window.location.replace("/");
     } catch {
       setError("無法連線到伺服器");
       setLoading(false);

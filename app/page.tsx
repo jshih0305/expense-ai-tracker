@@ -1,6 +1,5 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo, useState, useSyncExternalStore } from "react";
 import { formatMoney, formatMonth, shiftMonth, todayStr } from "@/lib/date";
 import Composer from "./_components/Composer";
@@ -18,7 +17,6 @@ const noopSubscribe = () => () => {};
 export default function Home() {
   // 「今天」只在瀏覽器端計算，避免伺服器預先渲染時把日期寫死
   const today = useSyncExternalStore(noopSubscribe, todayStr, () => null);
-  const router = useRouter();
 
   const [user, setUser] = useState<{ id: string; name: string; email: string } | null>(null);
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
@@ -39,12 +37,12 @@ export default function Home() {
     async (url: string) => {
       const res = await fetch(url);
       if (res.status === 401) {
-        router.replace("/login");
+        window.location.replace("/login");
         return null;
       }
       return res.json();
     },
-    [router],
+    [],
   );
 
   useEffect(() => {
@@ -123,8 +121,8 @@ export default function Home() {
 
   async function logout() {
     await fetch("/api/auth/logout", { method: "POST" });
-    router.replace("/login");
-    router.refresh();
+    // 整頁重新載入，清掉路由快取和上一位使用者的資料
+    window.location.replace("/login");
   }
 
   function handleSaved(saved: Expense[], message: string) {
