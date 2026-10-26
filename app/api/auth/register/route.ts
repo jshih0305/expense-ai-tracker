@@ -6,7 +6,7 @@ import UserModel from "@/models/User";
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 // 註冊驗證碼，先寫死
-const REGISTER_CODE = "love";
+const REGISTER_CODE = "valheart";
 
 export async function POST(request: Request) {
   let body: { email?: unknown; password?: unknown; name?: unknown; code?: unknown };
